@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Raw FHIR data ingested from the Synthetic Denver dataset, stored in Postgres."
+    database: fhir_omop
+    schema: public
+    tables:
+      - name: raw_patients
+      - name: raw_conditions

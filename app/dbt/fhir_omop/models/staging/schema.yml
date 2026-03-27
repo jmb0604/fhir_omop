@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: stg_patients
+    description: >
+      Staging model for patient data. This model standardizes column names and data types from the raw patient source, providing a clean foundation
+      for downstream transformations.
+    columns:
+      - name: resource_type
+        description: FHIR resouce type (should always be "Patient")
+      - name: id
+        description: Unique identifier for the patient resource
+        data_tests:
+          - not_null
+      - name: name
+        description: Patient's name, stored as a JSON array
+        data_tests:
+          - not_null
+      - name: telecom
+        description: Patient's contact information, stored as a JSON array
+      - name: gender
+        description: Gender (male | female | other | unknown)
+        data_tests:
+          - not_null
+      - name: birth_date
+        description: Patient's date of birth
+        data_tests:
+          - not_null
+      - name: address
+        description: Patient's address, stored as a JSON array
+      - name: multiple_birth_boolean
+        description: Indicates if the patient is part of a multiple birth (true/false)
+      - name: multiple_birth_integer
+        description: If the patient is part of a multiple birth, this field indicates the birth order
+      - name: contact
+        description: Patient's emergency contact information, stored as a JSON array
+      - name: communication
+        description: Patient's communication preferences, stored as a JSON array
+      - name: marital_status_coding
+        description: Patient's marital status, stored as a JSON object
+      - name: marital_status_text
+        description: Patient's marital status as text
+  - name: stg_conditions
+    description: >
+      Staging model for condition data. This model standardizes column names and data types from the raw condition source, providing a clean foundation
+      for downstream transformations.
+    columns:
+      - name: resource_type
+        description: FHIR resource type (should always be "Condition")
+      - name: id
+        description: Unique identifier for the condition resource
+        data_tests:
+          - not_null
+      - name: clinical_status_coding
+        description: Clinical status of the condition, stored as a JSON object
+      - name: clinical_status_text
+        description: Clinical status of the condition as text
+      - name: verification_status_coding
+        description: Verification status of the condition, stored as a JSON object
+      - name: verification_status_text
+        description: Verification status of the condition as text
+      - name: category_coding
+        description: Category of the condition, stored as a JSON object
+      - name: category_text
+        description: Category of the condition as text
+      - name: severity_coding
+        description: Severity of the condition, stored as a JSON object
+      - name: severity_text
+        description: Severity of the condition as text
+      - name: code_coding
+        description: Code representing the condition, stored as a JSON object (e.g., SNOMED CT code)
+      - name: code_text
+        description: Code representing the condition as text (e.g., "Obesity")

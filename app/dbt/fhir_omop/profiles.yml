@@ -1,0 +1,20 @@
+fhir_omop:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PG_HOST') }}"
+      user: "{{ env_var('PG_USER') }}"
+      password: "{{ env_var('PG_PASS') }}"
+      port: "{{ env_var('PG_PORT') | int }}"
+      dbname: "{{ env_var('PG_DB') }}"
+      schema: analytics
+      threads: 4
+
+    prod:
+        type: bigquery
+        method: service-account
+        project: "{{ env_var('GCP_PROJECT') }}"
+        dataset: "{{ env_var('BQ_DATASET') }}"
+        keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+        threads: 4

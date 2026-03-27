@@ -1,0 +1,55 @@
+services:
+  pgdatabase:
+    image: postgres:18
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=fhir_omop
+    volumes:
+      - "fhir_pg_data:/var/lib/postgresql:rw"
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    volumes:
+      - "pgadmin_data:/var/lib/pgadmin"
+    ports:
+      - "8085:80"
+
+  terraform:
+    image: hashicorp/terraform:1.6.6
+    volumes:
+      - ${PWD}/app/terraform:/workspace          # Terraform code
+      - ${PWD}/creds:/creds                      # GCP service account
+    working_dir: /workspace
+    tty: true
+
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - pgdatabase
+    env_file:
+      - .env
+    environment:
+      - _AIRFLOW_DB_UPGRADE=true
+      - AIRFLOW__CORE__LOAD_EXAMPLES=false
+    volumes:
+      - airflow_logs:/opt/airflow/logs
+      - ./app/airflow/dags:/opt/airflow/dags
+      - ./app/airflow/plugins:/opt/airflow/plugins
+      - ./app/dbt:/opt/airflow/app/dbt
+      - ./creds:/creds:ro 
+      - ./data:/opt/airflow/data
+    ports:
+      - "8080:8080"
+    command: bash -c "airflow standalone"
+      
+volumes:
+  fhir_pg_data:
+  pgadmin_data:
+  airflow_logs:

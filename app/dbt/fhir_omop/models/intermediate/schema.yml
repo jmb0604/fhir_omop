@@ -1,0 +1,119 @@
+version: 2
+
+models:
+  - name: omop_person
+    description: >
+      OMOP PERSON table derived from FHIR Patient data.
+      Contains demographic attributes such as gender and date of birth.
+
+    columns:
+      - name: person_id
+        description: "Unique identifier for each person (derived from FHIR Patient.id)."
+        tests:
+          - not_null
+          - unique
+      - name: gender_concept_id
+        description: >
+          Standard OMOP concept ID representing gender.
+          8507 = Male, 8532 = Female, 0 = Unknown.
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 8507, 8532]
+      - name: year_of_birth
+        description: "Year of birth extracted from birth_date."
+        tests:
+          - not_null
+      - name: month_of_birth
+        description: "Month of birth extracted from birth_date."
+        tests:
+          - not_null
+      - name: day_of_birth
+        description: "Day of birth extracted from birth_date."
+        tests:
+          - not_null
+      - name: birth_date
+        description: "Full date of birth from the source system."
+        tests:
+          - not_null
+      - name: gender_source_value
+        description: "Original gender value from FHIR Patient resource."
+
+  - name: omop_condition_occurrence
+    description: >
+      OMOP CONDITION_OCCURRENCE table derived from FHIR Condition resources.
+      Stores clinical conditions associated with a person.
+    columns:
+      - name: condition_occurrence_id
+        description: "Unique identifier for each condition record."
+        tests:
+          - not_null
+          - unique
+      - name: person_id
+        description: "Foreign key referencing the person table."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('omop_person')
+              field: person_id
+      - name: condition_concept_id
+        description: >
+          Standard OMOP concept ID for the condition.
+          Currently null and should be mapped from vocabulary.
+        tests:
+          - not_null
+      - name: condition_start_date
+        description: "Start date of the condition."
+        tests:
+          - not_null
+      - name: condition_start_datetime
+        description: "Start datetime of the condition."
+      - name: condition_end_date
+        description: "End date of the condition."
+      - name: condition_end_datetime
+        description: "End datetime of the condition."
+      - name: condition_type_concept_id
+        description: >
+          Indicates the source of the condition record.
+          32840 = EHR problem list.
+        tests:
+          - not_null
+      - name: condition_status_concept_id
+        description: >
+          Condition status:
+          9181 = Active,
+          37109701 = Resolved,
+          0 = Unknown.
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 9181, 37109701]
+      - name: condition_source_value
+        description: "Original condition code from the source FHIR resource."
+
+  - name: omop_concept
+    description: "OMOP CONCEPT table containing standardized concepts for conditions, demographics, etc."
+    columns:
+      - name: concept_id
+        description: "Unique identifier for the concept."
+        tests:
+          - not_null
+          - unique
+      - name: concept_name
+        description: "Name of the concept."
+      - name: domain_id
+        description: "Domain that the concept belongs to."
+      - name: vocabulary_id
+        description: "Vocabulary source for the concept."
+      - name: concept_class_id
+        description: "Classification of the concept."
+      - name: standard_concept
+        description: "Indicates if the concept is standard"
+      - name: concept_code
+        description: "Code representing the concept in the vocabulary."
+      - name: valid_start_date
+        description: "Start date of the concept's validity"
+      - name: valid_end_date
+        description: "End date of the concept's validity"
+      - name: invalid_reason
+        description: "Reason the concept is invalid, if any."
