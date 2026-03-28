@@ -57,9 +57,9 @@ Airflow Orchestration
         * `fhir_omop_dev`. This will run the dev pipeline (Postgres)
         * `fhir_omop_prod`. This will run the prod pipeline (BigQuery)
 
-![Airflow Dev Workflow](images/airflow_1.jpg)
+![Airflow Dev Workflow](images/airflow_1.png)
 
-![Airflow Prod Workflow](images/airflow_2.jpg)
+![Airflow Prod Workflow](images/airflow_2.png)
 
 ### Project Structure
 ```
@@ -201,16 +201,16 @@ Then click save.
 The raw_patients, raw_conditions, and batch_tracking tables are found within the public schema.  
 The stg_patients, stg_conditions, omop_person, omop_condition_occurrence, omop_concept, and mart_* tables are found within the analytics schema.
 
-![Postgres](images/postgres_1.jpg)
+![Postgres](images/postgres_1.png)
 
 ### Review the data in BigQuery & GCS
 Log in to your GCP console to review the data.
 
-![BigQuery](images/bigquery_1.jpg)
+![BigQuery](images/bigquery_1.png)
 
-![GCS](images/gcs_1.jpg)
+![GCS](images/gcs_1.png)
 
 ### Data Visualization Example in Looker Studio
 [Visit Dashboard](https://lookerstudio.google.com/reporting/68e70eaa-0a6b-4aca-a0a1-3a8ca7e79a5f)
 
-![Looker](images/looker_1.jpg)
+![Looker](images/looker_1.png)
