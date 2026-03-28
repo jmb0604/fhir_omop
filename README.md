@@ -27,7 +27,7 @@
 
 One of the main sources of FHIR data is from Electronic Health Records (EHRs). For this project, synthetic FHIR data was used to demonstrate the workflow. It is comprised of >6K simulated child patients residing in Colorado. Only **Patient** and **Condition** resources were selected for demonstration purposes, as the full FHIR dataset can be very large and complex to load and process. These resources are ingested into Postgres (dev) and BigQuery (prod) as semi-structured tables and also uploaded to GCS (json files). For more information on the source data, follow the instructions below to download the dataset, which includes additional documentation. For more information on FHIR resources and schemas visit https://hl7.org/fhir/R4/.
 
-To enable consistent analytics across different datasets, the FHIR data, which is often deeply nested in JSON format and can make data analysis challenging, is transformed into the **OMOP Common Data Model**, a widely adopted clinical data model. OMOP provides a relational structure that standardizes and normalizes the data, making it suitable for downstream analytics. This approach bridges the gap between hierarchical FHIR data and relational analytics-ready models. For more information on OMOP visit https://www.ohdsi.org/data-standardization/. For more information on OMOP tables and schemas visit https://ohdsi.github.io/CommonDataModel/cdm54.html
+To enable consistent analytics across different datasets, FHIR data—which is unstructured and deeply nested in JSON format, making analysis challenging—is transformed into the **OMOP Common Data Model**, a widely adopted clinical data model. OMOP provides a relational structure that standardizes and normalizes the data, making it suitable for downstream analytics. OMOP leverages standardized clinical vocabularies, which ensure consistent meaning across systems and enable semantic interoperability. This approach bridges the gap between hierarchical FHIR data and relational analytics-ready models. For more information on OMOP visit https://www.ohdsi.org/data-standardization/. For more information on OMOP tables and schemas visit https://ohdsi.github.io/CommonDataModel/cdm54.html. This project adopts an OMOP-like structure for demonstration purposes.
 
 Postgres serves as the development environment, while BigQuery is used for the finalized production tables.
 
@@ -38,13 +38,13 @@ Ingestion
 * Batch Tracking: The status of each batch (uploaded to GCS and loaded into Postgres) is now stored in Postgres (batch_tracking table).
 * Batch Ingestion:
     * Data is uploaded to Google Cloud Storage (GCS), organized by batch folders: `{batch}/patient/{id}.json` and `{batch}/condition/{id}.json`.
-    * Data is loaded into Postgres (raw_patients and raw_conditions tables).
+    * Data is loaded into Postgres (`raw_patients` and `raw_conditions` tables).
     * Before processing each batch, the system checks the Postgres batch_tracking table to determine if the batch has been uploaded to GCS and loaded into Postgres. If not, it will process the batch; otherwise, it will skip the batch.
 
 DBT Models
-* Staging Tables: DBT transforms data from the raw_patients and raw_conditions tables into staging tables (stg_patients, stg_conditions).
-* Intermediate Tables: DBT then processes the staging tables into intermediate tables such as omop_person and omop_condition_occurrence, which are used for analytics.  
-* Marts: DBT then processes the intermediate tables into marts such as mart_condition_summary, mart_patient_demographics, etc., which are used for downstream reporting and data visualization.
+* Staging Tables: DBT transforms data from the `raw_patients and `raw_conditions` tables into staging tables (`stg_patients`, `stg_conditions`).
+* Intermediate Tables: DBT then processes the staging tables into intermediate tables such as `omop_person` and `omop_condition_occurrence`, which are used for analytics.  
+* Marts: DBT then processes the intermediate tables into marts such as `mart_condition_summary`, `mart_patient_demographics`, etc., which are used for downstream reporting and data visualization.
 
 BigQuery Integration
 * BigQuery: The final analytics tables are transferred from Postgres to BigQuery.
@@ -159,11 +159,11 @@ wget -O data.zip "https://mitre.box.com/shared/static/ydmcj2kpwzoyt6zndx4yfz163h
 unzip -o data.zip -d data
 ```
 
-### Configure environment variables
-Review and update the .env file with the correct path to your GCP credentials. For example, this project is configured to use GCP credentials located at `/cred/keys.json`.
+### Configure Environment Variables
+Review and update the .env file with the correct path to your GCP credentials. For example, this project is configured to use GCP credentials located at `/creds/keys.json`. You can place your keys in a different location, but you’ll need to update the path accordingly.
 
 ### Setup Google Cloud Storage Bucket and BigQuery Dataset
-Before running the commands, review the `app/terraform/variables.tf` file to ensure that the path to your GCP credentials and the project ID are correctly set. For example, this project is configured to use GCP credentials located at `/cred/keys.json`. You can place the file in a different location, but you’ll need to update the path accordingly. Once verified, execute the following to create the GCS bucket and BigQuery dataset. You should be in the root directory when running the docker commands.
+Before running the commands, review the `app/terraform/variables.tf` file to ensure that the path to your GCP credentials and the project ID are correctly set. For example, this project is configured to use GCP credentials located at `/creds/keys.json`. You can place your keys in a different location, but you’ll need to update the path accordingly. Once verified, execute the following to create the GCS bucket and BigQuery dataset. You should be in the root directory when running the docker commands.
 ```
 docker compose run terraform init
 docker compose run terraform plan
