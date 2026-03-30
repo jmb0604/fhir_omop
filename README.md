@@ -148,6 +148,9 @@ fhir_omop/
 ```
 
 ## Running the Project
+### Important ⚠️
+This project was tested in a macOS environment and may require adjustments to function correctly on other operating systems.
+
 ### Get Source Data
 Due to its file size (>300 MB), the source data is not included in this repository. Use the commands to download the data. After extraction, there will be a directory named "Synthetic Denver" with multiple subdirectories.  
 NOTE: Ensure the source data is unzipped under the **data** directory.
@@ -156,7 +159,7 @@ NOTE: Ensure the source data is unzipped under the **data** directory.
 wget -O data.zip "https://mitre.box.com/shared/static/ydmcj2kpwzoyt6zndx4yfz163hfvyhd0.zip"
 
 # Unzip into the 'data' directory
-unzip -o data.zip -d data
+unzip -o data.zip
 ```
 
 ### Configure Environment Variables
