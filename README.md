@@ -42,7 +42,7 @@ Ingestion
     * Before processing each batch, the system checks the Postgres batch_tracking table to determine if the batch has been uploaded to GCS and loaded into Postgres. If not, it will process the batch; otherwise, it will skip the batch.
 
 DBT Models
-* Staging Tables: DBT transforms data from the `raw_patients and `raw_conditions` tables into staging tables (`stg_patients`, `stg_conditions`).
+* Staging Tables: DBT transforms data from the `raw_patients` and `raw_conditions` tables into staging tables (`stg_patients`, `stg_conditions`).
 * Intermediate Tables: DBT then processes the staging tables into intermediate tables such as `omop_person` and `omop_condition_occurrence`, which are used for analytics.  
 * Marts: DBT then processes the intermediate tables into marts such as `mart_condition_summary`, `mart_patient_demographics`, etc., which are used for downstream reporting and data visualization.
 
