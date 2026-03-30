@@ -151,6 +151,10 @@ fhir_omop/
 ### Important ⚠️
 This project was tested in a macOS environment and may require adjustments to function correctly on other operating systems.
 
+Ensure that the Docker Engine and Docker Compose plugin are installed; alternatively, you can install Docker Desktop for a more streamlined setup.
+* https://docs.docker.com/engine/install/
+* https://docs.docker.com/desktop/
+
 ### Get Source Data
 Due to its file size (>300 MB), the source data is not included in this repository. Use the commands to download the data. After extraction, there will be a directory named "Synthetic Denver" with multiple subdirectories.  
 NOTE: Ensure the source data is unzipped under the **data** directory.
@@ -188,7 +192,7 @@ Once logged in, go to `Dags` and click on the trigger button for
 * `fhir_omop_dev`. This will run the dev pipeline (Postgres)
 * `fhir_omop_prod`. This will run the prod pipeline (BigQuery)
     * This DAG is dependent on running the dev pipeline first.  
-NOTE: When running the dev pipline for the first time, this may take some time to complete the DAG workflow.
+NOTE: When running the dev pipline for the first time, this may take some time to complete the DAG workflow. Additionally, if any step in the DAG pipeline errors, it will automatically retry five minutes after the initial attempt.
 
 ### Review the data in Postgres
 Go to http://localhost:8085/  
