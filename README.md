@@ -168,9 +168,11 @@ unzip -o data.zip
 
 ### Configure Environment Variables
 Review and update the .env file with the correct path to your GCP credentials. For example, this project is configured to use GCP credentials located at `/creds/keys.json`. You can place your keys in a different location, but you’ll need to update the path accordingly.
+NOTE: GCS bucket names must be globally unique. Update the GCS_BUCKET accordingly.
 
 ### Setup Google Cloud Storage Bucket and BigQuery Dataset
 Before running the commands, review the `app/terraform/variables.tf` file to ensure that the path to your GCP credentials and the project ID are correctly set. For example, this project is configured to use GCP credentials located at `/creds/keys.json`. You can place your keys in a different location, but you’ll need to update the path accordingly. Once verified, execute the following to create the GCS bucket and BigQuery dataset. You should be in the root directory when running the docker commands.
+NOTE: GCS bucket names must be globally unique. Update the bucket name in `variables.tf` accordingly.
 ```
 docker compose run terraform init
 docker compose run terraform plan
